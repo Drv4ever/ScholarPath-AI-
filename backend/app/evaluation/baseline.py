@@ -13,10 +13,18 @@ class LexicalBaselineRecommender:
     """
     def __init__(self, catalogue: List[AcademicResource]):
         self.catalogue = catalogue
-        self.tokenized_corpus = [
-            tokenize(f"{res.title} {' '.join(res.keywords)} {res.subject} {' '.join(res.subfields)} {res.abstract}")
-            for res in catalogue
-        ]
+        self.tokenized_corpus = []
+        for res in catalogue:
+            parts = [
+                res.title or "",
+                " ".join(res.keywords or []),
+                res.subject or "",
+                " ".join(res.subfields or []),
+                res.subtopic or "",
+                res.abstract or res.description or "",
+                " ".join(res.learning_outcomes or [])
+            ]
+            self.tokenized_corpus.append(tokenize(" ".join(p for p in parts if p)))
         self.bm25 = BM25Okapi(self.tokenized_corpus)
 
     def retrieve_top_k(self, query: str, top_k: int = 5) -> List[AcademicResource]:

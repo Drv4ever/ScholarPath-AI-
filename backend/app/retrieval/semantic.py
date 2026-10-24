@@ -54,25 +54,29 @@ class SemanticRetriever:
                 self.backend_mode = "Deterministic TF-IDF + LSA"
 
         # Deterministic LSA / TF-IDF Vectorization
-        self.tfidf_vectorizer = TfidfVectorizer(
-            ngram_range=(1, 2),
-            max_features=2500,
-            sublinear_tf=True
-        )
-        tfidf_matrix = self.tfidf_vectorizer.fit_transform(documents)
-        n_components = min(64, tfidf_matrix.shape[1] - 1) if tfidf_matrix.shape[1] > 2 else 2
-        
-        if n_components >= 2:
-            self.lsa_model = TruncatedSVD(n_components=n_components, random_state=42)
-            lsa_embeds = self.lsa_model.fit_transform(tfidf_matrix)
-            norms = np.linalg.norm(lsa_embeds, axis=1, keepdims=True)
-            norms[norms == 0] = 1.0
-            self.doc_embeddings = (lsa_embeds / norms).astype(np.float32)
-        else:
-            dense_tfidf = tfidf_matrix.toarray()
-            norms = np.linalg.norm(dense_tfidf, axis=1, keepdims=True)
-            norms[norms == 0] = 1.0
-            self.doc_embeddings = (dense_tfidf / norms).astype(np.float32)
+        try:
+            self.tfidf_vectorizer = TfidfVectorizer(
+                ngram_range=(1, 2),
+                max_features=2500,
+                sublinear_tf=True
+            )
+            tfidf_matrix = self.tfidf_vectorizer.fit_transform(documents)
+            n_components = min(64, tfidf_matrix.shape[1] - 1) if tfidf_matrix.shape[1] > 2 else 2
+            
+            if n_components >= 2 and tfidf_matrix.shape[0] > n_components:
+                self.lsa_model = TruncatedSVD(n_components=n_components, random_state=42)
+                lsa_embeds = self.lsa_model.fit_transform(tfidf_matrix)
+                norms = np.linalg.norm(lsa_embeds, axis=1, keepdims=True)
+                norms[norms == 0] = 1.0
+                self.doc_embeddings = (lsa_embeds / norms).astype(np.float32)
+            else:
+                dense_tfidf = tfidf_matrix.toarray()
+                norms = np.linalg.norm(dense_tfidf, axis=1, keepdims=True)
+                norms[norms == 0] = 1.0
+                self.doc_embeddings = (dense_tfidf / norms).astype(np.float32)
+        except Exception as e:
+            logger.warning(f"TF-IDF indexing fallback triggered: {e}")
+            self.doc_embeddings = np.zeros((len(documents), 64), dtype=np.float32)
 
     def encode_query(self, query: str) -> np.ndarray:
         """Encode a single query string into a normalized 1D embedding vector."""

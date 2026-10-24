@@ -8,8 +8,10 @@
     "ground_truth_relevance": {
       "RES-CS-001": 3,
       "RES-CS-002": 3,
+      "RES-DS-001": 3,
+      "RES-CS-006": 2,
       "RES-MATH-002": 2,
-      "RES-CS-006": 1,
+      "RES-AIML-009": 2,
       "RES-CS-003": 0,
       "RES-CS-005": 0,
       "RES-EE-001": 0
@@ -24,8 +26,10 @@
     "ground_truth_relevance": {
       "RES-EE-001": 3,
       "RES-EE-002": 3,
-      "RES-EE-003": 2,
-      "RES-EE-004": 1,
+      "RES-EE-003": 3,
+      "RES-EE-004": 2,
+      "RES-EE-009": 1,
+      "RES-EE-010": 1,
       "RES-CS-001": 0,
       "RES-SOC-001": 0
     }
@@ -39,7 +43,9 @@
     "ground_truth_relevance": {
       "RES-SOC-001": 3,
       "RES-SOC-002": 3,
-      "RES-SOC-003": 2,
+      "RES-SOC-003": 3,
+      "RES-HUM-009": 2,
+      "RES-HUM-006": 1,
       "RES-CS-001": 0,
       "RES-EE-002": 0
     }
@@ -52,9 +58,10 @@
     "known_prerequisites": "Multivariable calculus and linear algebra",
     "ground_truth_relevance": {
       "RES-MATH-003": 3,
-      "RES-CS-007": 2,
+      "RES-CS-007": 3,
       "RES-MATH-001": 2,
       "RES-CS-003": 1,
+      "RES-MATH-009": 1,
       "RES-EE-001": 0
     }
   },
@@ -68,6 +75,7 @@
       "RES-BIO-001": 3,
       "RES-BIO-002": 3,
       "RES-CS-002": 1,
+      "RES-CS-008": 1,
       "RES-SOC-001": 0
     }
   }

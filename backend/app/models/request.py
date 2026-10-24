@@ -22,7 +22,9 @@ class RecommendRequest(BaseModel):
     # Ranking balance
     semantic_weight: float = Field(0.55, ge=0.0, le=1.0)
     lexical_weight: float = Field(0.45, ge=0.0, le=1.0)
-    top_k: int = Field(10, ge=1, le=50)
+    subject_weight: float = Field(0.15, ge=0.0, le=1.0, description="Weight for subject / subtopic topical alignment")
+    prerequisite_weight: float = Field(0.10, ge=0.0, le=1.0, description="Weight for prerequisite compatibility")
+    top_k: int = Field(10, ge=1, le=500)
     
     # Session-scoped feedback (enables stateless, privacy-preserving active feedback loop)
     session_feedback: List[SessionFeedbackItem] = Field(default_factory=list)

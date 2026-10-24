@@ -8,22 +8,31 @@ export interface AcademicResource {
   authors: string[];
   subject: string;
   subfields: string[];
+  subtopic?: string;
   keywords: string[];
   level: DifficultyLevel;
   resource_type: ResourceType;
   abstract: string;
+  description?: string;
   prerequisites: string[];
+  learning_outcomes?: string[];
   call_number?: string;
   url?: string;
+  isbn?: string;
+  doi?: string;
+  access_type?: string;
   publication_year?: number;
   borrow_count: number;
   quality_rating: number;
+  verified_metadata?: boolean;
+  provenance_note?: string;
 }
 
 export interface ExplanationBreakdown {
   semantic_match_pct: number;
   semantic_explanation: string;
   matched_keywords: string[];
+  matched_topics?: string[];
   subject_fit_score: number;
   subject_explanation: string;
   level_fit_score: number;
@@ -33,6 +42,7 @@ export interface ExplanationBreakdown {
   discovery_bonus_applied: number;
   feedback_boost_applied: number;
   summary_sentence: string;
+  score_contributions?: Record<string, number>;
 }
 
 export interface ScoredResource {

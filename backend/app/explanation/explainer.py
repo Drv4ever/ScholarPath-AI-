@@ -28,18 +28,29 @@ class ExplanationEngine:
         discovery_bonus: float,
         discovery_explanation: str,
         feedback_boost: float,
-        target_level: Optional[DifficultyLevel]
+        target_level: Optional[DifficultyLevel],
+        subject_fit_score: float = 0.8,
+        subject_explanation: Optional[str] = None,
+        score_contributions: Optional[Dict[str, float]] = None
     ) -> ExplanationBreakdown:
         semantic_pct = round(min(100.0, max(0.0, semantic_sim * 100.0)), 1)
         
-        # Subject fit
+        # Subject fit & topic overlap
         query_lower = query.lower()
-        subject_fit_score = 1.0 if resource.subject.lower() in query_lower else 0.8
-        subject_explanation = (
-            f"Direct subject match ({resource.subject})"
-            if subject_fit_score == 1.0
-            else f"Subject: {resource.subject} (cross-disciplinary relevant)"
-        )
+        if subject_explanation is None:
+            if resource.subject.lower() in query_lower:
+                subject_fit_score = 1.0
+                subject_explanation = f"Direct subject match ({resource.subject})"
+            else:
+                subject_fit_score = 0.8
+                subject_explanation = f"Subject: {resource.subject} (cross-disciplinary relevant)"
+
+        matched_topics_list = []
+        all_topics = (resource.subfields or []) + ([resource.subtopic] if resource.subtopic else [])
+        for top in all_topics:
+            if top and (top.lower() in query_lower or any(w in query_lower for w in top.lower().split())):
+                if top not in matched_topics_list:
+                    matched_topics_list.append(top)
 
         level_fit_score = max(0.0, 1.0 - level_penalty)
 
@@ -49,6 +60,8 @@ class ExplanationEngine:
             reasons.append(f"{semantic_pct}% conceptual alignment")
         if matched_tokens:
             reasons.append(f"matched keywords ({', '.join(matched_tokens[:3])})")
+        if matched_topics_list:
+            reasons.append(f"aligned topics ({', '.join(matched_topics_list[:2])})")
         if level_penalty == 0.0 and target_level is not None:
             reasons.append(f"exact {resource.level.value} level fit")
         elif level_penalty > 0.0:
@@ -64,7 +77,8 @@ class ExplanationEngine:
             semantic_match_pct=semantic_pct,
             semantic_explanation=f"{semantic_pct}% semantic concept match with student learning goal.",
             matched_keywords=matched_tokens,
-            subject_fit_score=subject_fit_score,
+            matched_topics=matched_topics_list,
+            subject_fit_score=round(subject_fit_score, 3),
             subject_explanation=subject_explanation,
             level_fit_score=round(level_fit_score, 3),
             level_penalty_applied=round(level_penalty, 3),
@@ -72,7 +86,8 @@ class ExplanationEngine:
             prerequisite_satisfaction=prereq_explanation,
             discovery_bonus_applied=round(discovery_bonus, 3),
             feedback_boost_applied=round(feedback_boost, 3),
-            summary_sentence=summary
+            summary_sentence=summary,
+            score_contributions=score_contributions or {}
         )
 
     @staticmethod

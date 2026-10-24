@@ -6,6 +6,7 @@ class ExplanationBreakdown(BaseModel):
     semantic_match_pct: float
     semantic_explanation: str
     matched_keywords: List[str]
+    matched_topics: List[str] = []
     subject_fit_score: float
     subject_explanation: str
     level_fit_score: float
@@ -15,6 +16,7 @@ class ExplanationBreakdown(BaseModel):
     discovery_bonus_applied: float
     feedback_boost_applied: float
     summary_sentence: str
+    score_contributions: Dict[str, float] = {}
 
 class ScoredResource(BaseModel):
     resource: AcademicResource

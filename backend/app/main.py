@@ -112,7 +112,7 @@ async def health_check():
 @app.get("/api/subjects", response_model=List[str], tags=["Catalogue"])
 async def get_subjects():
     """Retrieve distinct academic subjects available in the library catalogue."""
-    subjects = sorted(list({res.subject for res in catalogue_items}))
+    subjects = sorted(list({res.subject for res in catalogue_items if res.subject}))
     return subjects
 
 @app.get("/api/catalogue", response_model=List[AcademicResource], tags=["Catalogue"])
@@ -120,12 +120,12 @@ async def get_catalogue(
     subject: Optional[str] = None,
     level: Optional[DifficultyLevel] = None,
     resource_type: Optional[ResourceType] = None,
-    limit: int = Query(50, ge=1, le=100)
+    limit: int = Query(100, ge=1, le=500)
 ):
     """Browse or filter raw catalogue items."""
     filtered = catalogue_items
     if subject:
-        filtered = [r for r in filtered if r.subject.lower() == subject.lower()]
+        filtered = [r for r in filtered if r.subject and r.subject.lower() == subject.lower()]
     if level:
         filtered = [r for r in filtered if r.level == level]
     if resource_type:
