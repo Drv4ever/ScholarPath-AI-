@@ -134,20 +134,20 @@ export const EvaluationDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-12">
-      {/* Top Banner */}
-      <Card className="border-border shadow-xs">
-        <CardHeader className="p-5 flex flex-row items-center justify-between space-y-0">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+      {/* Top Research Header Banner */}
+      <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+        <CardHeader className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 space-y-0 bg-card">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <IconChartBar className="size-5" />
               </div>
-              <CardTitle className="text-lg font-bold">
-                Information Retrieval Benchmark & Lexical Baseline Comparison
+              <CardTitle className="text-base sm:text-lg font-bold text-foreground">
+                Information Retrieval Benchmark & Baseline Comparison
               </CardTitle>
             </div>
-            <CardDescription className="text-xs text-muted-foreground">
-              Live, reproducible evaluation computed over expert human-annotated ground-truth test queries.
+            <CardDescription className="text-xs text-muted-foreground font-medium">
+              Live, reproducible IR evaluation computed over expert-annotated ground-truth test queries comparing ScholarPath against BM25Okapi.
             </CardDescription>
           </div>
 
@@ -156,26 +156,26 @@ export const EvaluationDashboard: React.FC = () => {
             size="sm"
             onClick={loadEvaluation}
             disabled={loading}
-            className="gap-1.5 font-bold"
+            className="h-9 px-4 font-bold gap-2 shrink-0 shadow-xs"
           >
             <IconRotateClockwise className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>{loading ? "Evaluating..." : "Re-run Benchmark"}</span>
+            <span>{loading ? "Computing IR Metrics..." : "Re-run Benchmark"}</span>
           </Button>
         </CardHeader>
       </Card>
 
       {error && (
-        <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4 text-xs text-destructive flex items-center gap-2">
-          <IconAlertTriangle className="size-4 flex-shrink-0" />
+        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-xs text-destructive flex items-center gap-2">
+          <IconAlertTriangle className="size-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {loading && !summary && (
-        <div className="py-16 text-center space-y-2">
-          <span className="size-7 inline-block animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="py-20 text-center space-y-3 rounded-xl border border-border/60 bg-card">
+          <span className="size-8 inline-block animate-spin rounded-full border-2 border-primary border-t-transparent" />
           <p className="text-xs text-muted-foreground font-semibold">
-            Computing IR metrics (Precision, Recall, NDCG, MRR)...
+            Computing IR metrics across test queries (Precision, Recall, NDCG, MRR)...
           </p>
         </div>
       )}
@@ -183,14 +183,14 @@ export const EvaluationDashboard: React.FC = () => {
       {!loading && summary && (
         <>
           {/* Key Metric Cards */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <Card className="border-border shadow-xs">
-              <CardContent className="p-4 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+              <CardContent className="p-4 sm:p-5 space-y-1.5">
+                <span className="text-xs font-semibold text-muted-foreground block">
                   Precision@5 (Top-5 Accuracy)
                 </span>
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-2xl font-black text-foreground">
+                <div className="flex items-baseline gap-2 flex-wrap pt-0.5">
+                  <span className="text-3xl font-black text-foreground">
                     {(summary.hybrid_aggregate.precision_at_5 * 100).toFixed(1)}%
                   </span>
                   {renderDeltaBadge(
@@ -199,19 +199,20 @@ export const EvaluationDashboard: React.FC = () => {
                     true
                   )}
                 </div>
-                <span className="text-[10px] text-muted-foreground block">
-                  BM25: {(summary.baseline_aggregate.precision_at_5 * 100).toFixed(1)}%
-                </span>
+                <div className="pt-1 text-xs text-muted-foreground space-y-0.5">
+                  <div>BM25 Baseline: <strong className="text-foreground font-semibold">{(summary.baseline_aggregate.precision_at_5 * 100).toFixed(1)}%</strong></div>
+                  <div className="text-[11px] text-muted-foreground/80">Proportion of top-5 results directly relevant to goal.</div>
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border shadow-xs">
-              <CardContent className="p-4 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+            <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+              <CardContent className="p-4 sm:p-5 space-y-1.5">
+                <span className="text-xs font-semibold text-muted-foreground block">
                   NDCG@5 (Ranking Quality)
                 </span>
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-2xl font-black text-foreground">
+                <div className="flex items-baseline gap-2 flex-wrap pt-0.5">
+                  <span className="text-3xl font-black text-foreground">
                     {summary.hybrid_aggregate.ndcg_at_5.toFixed(3)}
                   </span>
                   {renderDeltaBadge(
@@ -220,23 +221,24 @@ export const EvaluationDashboard: React.FC = () => {
                     false
                   )}
                 </div>
-                <span className="text-[10px] text-muted-foreground block">
-                  BM25: {summary.baseline_aggregate.ndcg_at_5.toFixed(3)}
-                </span>
+                <div className="pt-1 text-xs text-muted-foreground space-y-0.5">
+                  <div>BM25 Baseline: <strong className="text-foreground font-semibold">{summary.baseline_aggregate.ndcg_at_5.toFixed(3)}</strong></div>
+                  <div className="text-[11px] text-muted-foreground/80">Graded gain measuring ranking order correctness.</div>
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border shadow-xs">
-              <CardContent className="p-4 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+            <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+              <CardContent className="p-4 sm:p-5 space-y-1.5">
+                <span className="text-xs font-semibold text-muted-foreground block">
                   Mean Reciprocal Rank (MRR)
                 </span>
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-2xl font-black text-foreground">
+                <div className="flex items-baseline gap-2 flex-wrap pt-0.5">
+                  <span className="text-3xl font-black text-foreground">
                     {summary.hybrid_aggregate.mrr.toFixed(3)}
                   </span>
                   {summary.hybrid_aggregate.mrr >= 0.999 ? (
-                    <Badge variant="secondary" className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-[11px]">
+                    <Badge variant="secondary" className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-xs">
                       Optimal Rank #1
                     </Badge>
                   ) : (
@@ -247,19 +249,20 @@ export const EvaluationDashboard: React.FC = () => {
                     )
                   )}
                 </div>
-                <span className="text-[10px] text-muted-foreground block">
-                  First relevant book at top rank
-                </span>
+                <div className="pt-1 text-xs text-muted-foreground space-y-0.5">
+                  <div>BM25 Baseline: <strong className="text-foreground font-semibold">{summary.baseline_aggregate.mrr.toFixed(3)}</strong></div>
+                  <div className="text-[11px] text-muted-foreground/80">First relevant book retrieved at highest rank position.</div>
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border shadow-xs">
-              <CardContent className="p-4 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
-                  Recall@5 (Coverage)
+            <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+              <CardContent className="p-4 sm:p-5 space-y-1.5">
+                <span className="text-xs font-semibold text-muted-foreground block">
+                  Recall@5 (Curricular Coverage)
                 </span>
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-2xl font-black text-foreground">
+                <div className="flex items-baseline gap-2 flex-wrap pt-0.5">
+                  <span className="text-3xl font-black text-foreground">
                     {(summary.hybrid_aggregate.recall_at_5 * 100).toFixed(1)}%
                   </span>
                   {renderDeltaBadge(
@@ -268,188 +271,209 @@ export const EvaluationDashboard: React.FC = () => {
                     true
                   )}
                 </div>
-                <span className="text-[10px] text-muted-foreground block">
-                  BM25: {(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}% ({summary.total_test_queries} Queries)
-                </span>
+                <div className="pt-1 text-xs text-muted-foreground space-y-0.5">
+                  <div>BM25 Baseline: <strong className="text-foreground font-semibold">{(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}%</strong></div>
+                  <div className="text-[11px] text-muted-foreground/80">Coverage of gold-standard references captured in top-5.</div>
+                </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Head-to-Head Comparison Table */}
-          <Card className="border-border shadow-xs overflow-hidden">
-            <CardHeader className="p-4 border-b border-border">
-              <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
-                Head-to-Head Performance Benchmark
-              </CardTitle>
+          <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+            <CardHeader className="p-4 sm:p-5 border-b border-border/80 bg-muted/20">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
+                  Head-to-Head Performance Benchmark (Hybrid Recommender vs BM25 Baseline)
+                </CardTitle>
+                <span className="text-xs text-muted-foreground font-medium">
+                  {summary.total_test_queries} Ground-Truth Annotated Queries
+                </span>
+              </div>
             </CardHeader>
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50">
-                  <TableHead className="text-xs font-bold">Evaluation Metric</TableHead>
-                  <TableHead className="text-xs font-bold">Lexical Baseline (BM25)</TableHead>
-                  <TableHead className="text-xs font-bold text-primary">ScholarPath AI (Proposed)</TableHead>
-                  <TableHead className="text-xs font-bold">Statistical Delta</TableHead>
-                  <TableHead className="text-xs font-bold">IR Significance</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-bold text-xs">Precision@3</TableCell>
-                  <TableCell className="font-mono text-xs">{(summary.baseline_aggregate.precision_at_3 * 100).toFixed(1)}%</TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-primary">
-                    {(summary.hybrid_aggregate.precision_at_3 * 100).toFixed(1)}%
-                  </TableCell>
-                  <TableCell>
-                    {renderTableCellGain(summary.hybrid_aggregate.precision_at_3, summary.baseline_aggregate.precision_at_3, true)}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">Proportion of top 3 suggestions directly relevant.</TableCell>
-                </TableRow>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40 border-b border-border">
+                    <TableHead className="text-xs font-bold text-foreground">Evaluation Metric</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">Lexical Baseline (BM25)</TableHead>
+                    <TableHead className="text-xs font-bold text-primary">ScholarPath AI (Proposed)</TableHead>
+                    <TableHead className="text-xs font-bold text-foreground">Statistical Delta</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">Pedagogical / IR Significance</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-muted/30">
+                    <TableCell className="font-semibold text-xs">Precision@3</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">{(summary.baseline_aggregate.precision_at_3 * 100).toFixed(1)}%</TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {(summary.hybrid_aggregate.precision_at_3 * 100).toFixed(1)}%
+                    </TableCell>
+                    <TableCell>
+                      {renderTableCellGain(summary.hybrid_aggregate.precision_at_3, summary.baseline_aggregate.precision_at_3, true)}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">Relevance density of immediate top-3 student suggestions.</TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell className="font-bold text-xs">Precision@5</TableCell>
-                  <TableCell className="font-mono text-xs">{(summary.baseline_aggregate.precision_at_5 * 100).toFixed(1)}%</TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-primary">
-                    {(summary.hybrid_aggregate.precision_at_5 * 100).toFixed(1)}%
-                  </TableCell>
-                  <TableCell>
-                    {renderTableCellGain(summary.hybrid_aggregate.precision_at_5, summary.baseline_aggregate.precision_at_5, true)}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">Quality of immediate student recommendations.</TableCell>
-                </TableRow>
+                  <TableRow className="hover:bg-muted/30 bg-primary/[0.01]">
+                    <TableCell className="font-bold text-xs text-foreground">Precision@5</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">{(summary.baseline_aggregate.precision_at_5 * 100).toFixed(1)}%</TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {(summary.hybrid_aggregate.precision_at_5 * 100).toFixed(1)}%
+                    </TableCell>
+                    <TableCell>
+                      {renderTableCellGain(summary.hybrid_aggregate.precision_at_5, summary.baseline_aggregate.precision_at_5, true)}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">Primary metric: quality across the immediate student recommendation window.</TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell className="font-bold text-xs">NDCG@5</TableCell>
-                  <TableCell className="font-mono text-xs">{summary.baseline_aggregate.ndcg_at_5.toFixed(4)}</TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-primary">
-                    {summary.hybrid_aggregate.ndcg_at_5.toFixed(4)}
-                  </TableCell>
-                  <TableCell>
-                    {renderTableCellGain(summary.hybrid_aggregate.ndcg_at_5, summary.baseline_aggregate.ndcg_at_5, false)}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">Graded ranking quality under discounted gain.</TableCell>
-                </TableRow>
+                  <TableRow className="hover:bg-muted/30">
+                    <TableCell className="font-semibold text-xs">NDCG@5</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">{summary.baseline_aggregate.ndcg_at_5.toFixed(4)}</TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {summary.hybrid_aggregate.ndcg_at_5.toFixed(4)}
+                    </TableCell>
+                    <TableCell>
+                      {renderTableCellGain(summary.hybrid_aggregate.ndcg_at_5, summary.baseline_aggregate.ndcg_at_5, false)}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">Graded ranking quality under discounted logarithmic positional gain.</TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell className="font-bold text-xs">Mean Reciprocal Rank (MRR)</TableCell>
-                  <TableCell className="font-mono text-xs">{summary.baseline_aggregate.mrr.toFixed(4)}</TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-primary">
-                    {summary.hybrid_aggregate.mrr.toFixed(4)}
-                  </TableCell>
-                  <TableCell>
-                    {summary.hybrid_aggregate.mrr >= 0.999 && summary.baseline_aggregate.mrr >= 0.999 ? (
-                      <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                        Optimal (1.0000)
-                      </span>
-                    ) : (
-                      renderTableCellGain(summary.hybrid_aggregate.mrr, summary.baseline_aggregate.mrr, false)
-                    )}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">First highly relevant item retrieved at rank 1.</TableCell>
-                </TableRow>
+                  <TableRow className="hover:bg-muted/30">
+                    <TableCell className="font-semibold text-xs">Mean Reciprocal Rank (MRR)</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">{summary.baseline_aggregate.mrr.toFixed(4)}</TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {summary.hybrid_aggregate.mrr.toFixed(4)}
+                    </TableCell>
+                    <TableCell>
+                      {summary.hybrid_aggregate.mrr >= 0.999 && summary.baseline_aggregate.mrr >= 0.999 ? (
+                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                          Optimal (1.0000)
+                        </span>
+                      ) : (
+                        renderTableCellGain(summary.hybrid_aggregate.mrr, summary.baseline_aggregate.mrr, false)
+                      )}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">First highly relevant scholarly resource retrieved at Rank #1.</TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell className="font-bold text-xs">Recall@5</TableCell>
-                  <TableCell className="font-mono text-xs">{(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}%</TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-primary">
-                    {(summary.hybrid_aggregate.recall_at_5 * 100).toFixed(1)}%
-                  </TableCell>
-                  <TableCell>
-                    {renderTableCellGain(summary.hybrid_aggregate.recall_at_5, summary.baseline_aggregate.recall_at_5, true)}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">Coverage of gold-standard references captured.</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                  <TableRow className="hover:bg-muted/30">
+                    <TableCell className="font-semibold text-xs">Recall@5</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">{(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}%</TableCell>
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {(summary.hybrid_aggregate.recall_at_5 * 100).toFixed(1)}%
+                    </TableCell>
+                    <TableCell>
+                      {renderTableCellGain(summary.hybrid_aggregate.recall_at_5, summary.baseline_aggregate.recall_at_5, true)}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">Coverage of gold-standard academic references captured.</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </Card>
 
           {/* Ablation Study Table */}
-          <Card className="border-border shadow-xs overflow-hidden">
-            <CardHeader className="p-4 border-b border-border">
+          <Card className="border-border shadow-xs rounded-xl overflow-hidden">
+            <CardHeader className="p-4 sm:p-5 border-b border-border/80 bg-muted/20">
               <div className="flex items-center gap-2">
                 <IconAdjustments className="size-4 text-primary" />
                 <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
-                  Ablation Study: Quantifying Novelty Contributions
+                  Ablation Study: Quantifying Pedagogical Novelty Contributions
                 </CardTitle>
               </div>
             </CardHeader>
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50">
-                  <TableHead className="text-xs font-bold">System Configuration</TableHead>
-                  <TableHead className="text-xs font-bold">P@5</TableHead>
-                  <TableHead className="text-xs font-bold">NDCG@5</TableHead>
-                  <TableHead className="text-xs font-bold">MRR</TableHead>
-                  <TableHead className="text-xs font-bold">Empirical Impact</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Object.entries(summary.ablation_study).map(([configName, metrics], idx) => (
-                  <TableRow key={idx}>
-                    <TableCell className="font-semibold text-xs">{configName}</TableCell>
-                    <TableCell className="font-mono text-xs">{(metrics.precision_at_5 * 100).toFixed(1)}%</TableCell>
-                    <TableCell className="font-mono text-xs">{metrics.ndcg_at_5.toFixed(3)}</TableCell>
-                    <TableCell className="font-mono text-xs">{metrics.mrr.toFixed(3)}</TableCell>
-                    <TableCell className="text-xs text-muted-foreground">
-                      {configName.includes("ScholarPath")
-                        ? "Optimal cognitive fit; suppresses inaccessible monographs for beginners."
-                        : configName.includes("Ablation")
-                        ? "Suffers from cognitive overload: recommends research papers to first-years."
-                        : "Vocabulary mismatch: misses synonyms and conceptual relations."}
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40 border-b border-border">
+                    <TableHead className="text-xs font-bold text-foreground">System Configuration</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">P@5</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">NDCG@5</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">MRR</TableHead>
+                    <TableHead className="text-xs font-bold text-muted-foreground">Empirical Pedagogical Impact</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {Object.entries(summary.ablation_study).map(([configName, metrics], idx) => (
+                    <TableRow key={idx} className={configName.includes("ScholarPath") ? "bg-primary/[0.02]" : "hover:bg-muted/30"}>
+                      <TableCell className="font-semibold text-xs text-foreground">
+                        {configName.includes("ScholarPath") ? (
+                          <span className="text-primary font-bold">{configName}</span>
+                        ) : (
+                          configName
+                        )}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs font-medium">{(metrics.precision_at_5 * 100).toFixed(1)}%</TableCell>
+                      <TableCell className="font-mono text-xs font-medium">{metrics.ndcg_at_5.toFixed(3)}</TableCell>
+                      <TableCell className="font-mono text-xs font-medium">{metrics.mrr.toFixed(3)}</TableCell>
+                      <TableCell className="text-xs text-muted-foreground">
+                        {configName.includes("ScholarPath")
+                          ? "Optimal cognitive fit; suppresses inaccessible monographs for beginners while retaining cross-disciplinary breadth."
+                          : configName.includes("Ablation")
+                          ? "Suffers from cognitive overload: recommends impenetrable research papers to introductory undergraduates."
+                          : "Vocabulary mismatch: misses conceptual synonyms and cross-disciplinary topic relationships."}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </Card>
 
-          {/* Documented Failure-Case Analysis & Limitations */}
-          <Card className="border-border shadow-xs">
-            <CardHeader className="p-4 border-b border-border">
-              <div className="flex items-center gap-2">
-                <IconAlertTriangle className="size-4 text-amber-500" />
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
-                  Documented Failure-Case Analysis & Limitations
-                </CardTitle>
-              </div>
-              <CardDescription className="text-xs text-muted-foreground">
-                Rigorous analysis of real IR failure modes, cross-domain polysemy, and boundary limitations.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Documented Failure-Case Analysis & Technical Limitations */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center gap-2 px-1">
+              <IconAlertTriangle className="size-4 text-amber-500" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
+                Documented Failure-Case Analysis & Technical Limitations
+              </h3>
+            </div>
+            <p className="text-xs text-muted-foreground px-1 -mt-1">
+              Transparent IR failure mode analysis required by university hackathon evaluation standards.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {failures.map((fail) => (
-                <div
+                <Card
                   key={fail.id}
-                  className="rounded-lg border border-border bg-muted/30 p-3.5 space-y-2 flex flex-col justify-between text-xs"
+                  className="rounded-xl border border-border shadow-xs bg-card p-4 flex flex-col justify-between space-y-3"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-mono text-[10px] text-muted-foreground font-bold">{fail.id}</span>
-                      <Badge variant="outline" className="text-[10px] font-bold text-amber-600">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold text-muted-foreground">{fail.id}</span>
+                      <Badge variant="outline" className="text-xs font-semibold text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-800">
                         {fail.failure_type}
                       </Badge>
                     </div>
-                    <p className="font-bold text-foreground mb-1">"{fail.query}"</p>
-                    <p className="text-muted-foreground text-[11px] leading-relaxed mb-2">{fail.description}</p>
 
-                    <div className="space-y-1 pt-2 border-t border-border">
-                      <div>
-                        <span className="text-[10px] font-bold text-destructive uppercase block">Baseline Issue:</span>
-                        <span className="text-[11px] text-muted-foreground">{fail.lexical_baseline_result}</span>
+                    <p className="font-bold text-sm text-foreground">"{fail.query}"</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{fail.description}</p>
+
+                    <div className="space-y-2 pt-2 border-t border-border/80 text-xs">
+                      <div className="space-y-0.5">
+                        <span className="text-[11px] font-bold text-destructive uppercase tracking-wider block">
+                          Baseline Failure:
+                        </span>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{fail.lexical_baseline_result}</p>
                       </div>
-                      <div>
-                        <span className="text-[10px] font-bold text-emerald-600 uppercase block">Our Mitigation:</span>
-                        <span className="text-[11px] text-muted-foreground">{fail.mitigation_strategy}</span>
+
+                      <div className="space-y-0.5">
+                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
+                          ScholarPath Mitigation:
+                        </span>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{fail.mitigation_strategy}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-border text-[10px] text-muted-foreground italic">
-                    Remaining limitation: {fail.remaining_limitation}
+                  <div className="pt-2 border-t border-border/80 text-[11px] text-muted-foreground italic leading-relaxed">
+                    Remaining boundary: {fail.remaining_limitation}
                   </div>
-                </div>
+                </Card>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </>
       )}
     </div>

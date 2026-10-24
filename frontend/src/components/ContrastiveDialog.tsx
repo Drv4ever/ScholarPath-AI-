@@ -73,48 +73,48 @@ export const ContrastiveDialog: React.FC<ContrastiveDialogProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl">
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <IconGitCompare className="size-4" />
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <IconGitCompare className="size-4.5" />
             </div>
-            <DialogTitle className="text-base font-bold">
-              Contrastive Explanation: Why X over Y?
+            <DialogTitle className="text-base font-bold text-foreground">
+              Contrastive Explanation: Why Resource A over Resource B?
             </DialogTitle>
           </div>
-          <DialogDescription className="text-xs text-muted-foreground">
-            Causal feature attribution comparing two candidate resources under current query constraints.
+          <DialogDescription className="text-xs text-muted-foreground font-medium">
+            Causal counterfactual feature comparison explaining why the higher-ranked resource was selected over a candidate.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          {/* Target & Alternative Selector Header */}
-          <div className="grid grid-cols-1 gap-3 rounded-lg border border-border bg-muted/30 p-3 sm:grid-cols-2">
-            <div>
-              <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-primary">
+          {/* Target & Alternative Comparison Header */}
+          <div className="grid grid-cols-1 gap-3 rounded-xl border border-border/80 bg-muted/20 p-3.5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <span className="block text-xs font-semibold text-primary">
                 Selected Resource (#{targetItem.rank})
               </span>
               <p className="text-xs font-bold text-foreground line-clamp-1">
                 {targetItem.resource.title}
               </p>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground block">
                 {targetItem.resource.level} • {targetItem.resource.subject}
               </span>
             </div>
 
-            <div>
-              <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Compare Against Alternative
+            <div className="space-y-1">
+              <span className="block text-xs font-semibold text-muted-foreground">
+                Compare Against Alternative:
               </span>
               <select
                 value={selectedAltId}
                 onChange={(e) => setSelectedAltId(e.target.value)}
-                className="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-xs font-medium text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="flex h-9 w-full rounded-lg border border-input bg-card px-2.5 py-1 text-xs font-medium text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
               >
                 {alternatives.map((alt) => (
                   <option key={alt.resource.id} value={alt.resource.id}>
-                    #{alt.rank} - {alt.resource.title} ({alt.resource.level})
+                    #{alt.rank} — {alt.resource.title} ({alt.resource.level})
                   </option>
                 ))}
               </select>
@@ -122,15 +122,15 @@ export const ContrastiveDialog: React.FC<ContrastiveDialogProps> = ({
           </div>
 
           {loading && (
-            <div className="py-8 text-center space-y-2">
+            <div className="py-10 text-center space-y-2">
               <span className="size-6 inline-block animate-spin rounded-full border-2 border-primary border-t-transparent" />
-              <p className="text-xs text-muted-foreground">Computing causal factor attribution...</p>
+              <p className="text-xs text-muted-foreground font-medium">Computing causal feature differences...</p>
             </div>
           )}
 
           {error && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive flex items-center gap-2">
-              <IconAlertTriangle className="size-4 flex-shrink-0" />
+            <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-3.5 text-xs text-destructive flex items-center gap-2">
+              <IconAlertTriangle className="size-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -138,48 +138,48 @@ export const ContrastiveDialog: React.FC<ContrastiveDialogProps> = ({
           {!loading && explanation && (
             <>
               {/* Narrative Synthesis */}
-              <div className="rounded-lg border border-primary/20 bg-primary/5 p-3.5 space-y-1">
+              <div className="rounded-xl border border-primary/20 bg-primary/[0.03] p-4 space-y-1.5">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
                   <IconTrophy className="size-4" />
-                  <span>Comparative Ranking Synthesis</span>
+                  <span>Causal Ranking Narrative</span>
                 </div>
-                <p className="text-xs text-foreground leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm text-foreground leading-relaxed font-medium">
                   {explanation.narrative_explanation}
                 </p>
               </div>
 
               {/* Criterion-by-Criterion Table */}
-              <div>
-                <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Feature-Level Breakdown
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground px-0.5">
+                  Feature-Level Attribution Matrix
                 </h4>
-                <div className="rounded-lg border border-border overflow-hidden">
+                <div className="rounded-xl border border-border/80 overflow-hidden">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-muted/50">
-                        <TableHead className="text-xs font-bold">Criterion</TableHead>
-                        <TableHead className="text-xs font-bold">Target</TableHead>
-                        <TableHead className="text-xs font-bold">Alternative</TableHead>
-                        <TableHead className="text-xs font-bold">Advantage</TableHead>
-                        <TableHead className="text-xs font-bold">Impact</TableHead>
+                      <TableRow className="bg-muted/40 hover:bg-muted/40 border-b border-border">
+                        <TableHead className="text-xs font-bold text-foreground">Criterion</TableHead>
+                        <TableHead className="text-xs font-bold text-muted-foreground">Target ({targetItem.resource.id})</TableHead>
+                        <TableHead className="text-xs font-bold text-muted-foreground">Alternative</TableHead>
+                        <TableHead className="text-xs font-bold text-foreground">Advantage</TableHead>
+                        <TableHead className="text-xs font-bold text-muted-foreground">Impact</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {explanation.factors.map((factor, idx) => (
-                        <TableRow key={idx}>
-                          <TableCell className="text-xs font-semibold">{factor.criterion}</TableCell>
-                          <TableCell className="text-xs text-muted-foreground">{factor.target_value}</TableCell>
-                          <TableCell className="text-xs text-muted-foreground">{factor.alternative_value}</TableCell>
+                        <TableRow key={idx} className="hover:bg-muted/20">
+                          <TableCell className="text-xs font-semibold text-foreground">{factor.criterion}</TableCell>
+                          <TableCell className="text-xs text-muted-foreground font-mono">{factor.target_value}</TableCell>
+                          <TableCell className="text-xs text-muted-foreground font-mono">{factor.alternative_value}</TableCell>
                           <TableCell>
                             <Badge
-                              variant={
+                              variant="outline"
+                              className={`text-xs font-semibold ${
                                 factor.advantage === "Target"
-                                  ? "default"
+                                  ? "text-emerald-600 border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20"
                                   : factor.advantage === "Alternative"
-                                  ? "destructive"
-                                  : "secondary"
-                              }
-                              className="text-[10px]"
+                                  ? "text-rose-600 border-rose-300 bg-rose-50 dark:bg-rose-950/20"
+                                  : "text-muted-foreground border-border"
+                              }`}
                             >
                               {factor.advantage}
                             </Badge>
@@ -195,8 +195,8 @@ export const ContrastiveDialog: React.FC<ContrastiveDialogProps> = ({
           )}
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" size="sm" onClick={onClose}>
+        <DialogFooter className="border-t border-border/60 pt-3">
+          <Button variant="outline" size="sm" onClick={onClose} className="h-8 font-semibold text-xs">
             Close
           </Button>
         </DialogFooter>

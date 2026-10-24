@@ -242,24 +242,27 @@ function ScholarPathApp() {
               </div>
 
               <div className="lg:col-span-3">
-                {/* Engine Latency & Candidates Header */}
-                <Card className="mb-4 border-border shadow-xs">
-                  <CardContent className="p-3.5 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <IconSparkles className="size-4 text-primary" />
-                      <span>
-                        Found <strong className="text-foreground">{recommendResponse?.matched_count || 0}</strong>{" "}
-                        relevant academic resources
-                      </span>
-                    </div>
-                    <div className="text-muted-foreground font-medium">
-                      Engine Latency:{" "}
-                      <Badge variant="outline" className="font-mono text-foreground ml-1">
-                        {recommendResponse?.latency_ms || 0} ms
+                {/* Results Header: Latency, Count & Mode (Borderless for clean hierarchy) */}
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
+                  <div className="flex items-center gap-2 text-muted-foreground font-medium">
+                    <IconSparkles className="size-4 text-primary shrink-0" />
+                    <span>
+                      Found <strong className="text-foreground font-bold">{recommendResponse?.matched_count || 0}</strong>{" "}
+                      academically relevant resources
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <span className="font-mono text-xs">
+                      Latency: <strong className="text-foreground">{recommendResponse?.latency_ms || 0} ms</strong>
+                    </span>
+                    {recommendResponse?.retrieval_mode && (
+                      <Badge variant="outline" className="text-[11px] font-normal border-border/80 hidden sm:inline-flex">
+                        {recommendResponse.retrieval_mode}
                       </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
+                    )}
+                  </div>
+                </div>
 
                 {/* Empty State */}
                 {recommendResponse?.results.length === 0 && !isLoading && (

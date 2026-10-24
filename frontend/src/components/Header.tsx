@@ -1,10 +1,7 @@
 import React from "react"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   IconBook,
-  IconShieldCheck,
-  IconBolt,
   IconChartBar,
   IconWorld,
 } from "@tabler/icons-react"
@@ -19,7 +16,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
-  catalogueSize = 20,
+  catalogueSize = 113,
 }) => {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
@@ -29,15 +26,15 @@ export const Header: React.FC<HeaderProps> = ({
           className="flex cursor-pointer items-center gap-3"
           onClick={() => setActiveTab("search")}
         >
-          <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+          <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
             <IconBook className="size-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-heading text-lg font-bold tracking-tight text-foreground">
+              <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-foreground">
                 ScholarPath AI
               </span>
-              <Badge variant="secondary" className="text-[10px] uppercase font-bold">
+              <Badge variant="secondary" className="text-[11px] font-semibold text-muted-foreground px-2 py-0.5">
                 VIT Hackathon
               </Badge>
             </div>
@@ -47,52 +44,64 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Cold-Start System Status Indicators */}
-        <div className="hidden items-center gap-2 md:flex">
-          <Badge variant="outline" className="gap-1 text-xs font-medium">
-            <IconShieldCheck className="size-3.5 text-emerald-600" />
+        {/* Unified Cold-Start & Privacy Status Pill */}
+        <div className="hidden lg:flex items-center gap-2.5 text-xs text-muted-foreground border border-border/80 bg-muted/20 px-3 py-1 rounded-full">
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="size-2 rounded-full bg-emerald-500 inline-block" />
             Cold-Start (Zero User Logs)
-          </Badge>
-          <Badge variant="outline" className="gap-1 text-xs font-medium">
-            <IconBolt className="size-3.5 text-amber-500" />
-            In-Session Vector Steering
-          </Badge>
-          <Badge variant="secondary" className="text-xs font-medium">
+          </span>
+          <span className="text-border select-none">•</span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="size-2 rounded-full bg-amber-500 inline-block" />
+            In-Session Feedback Steering
+          </span>
+          <span className="text-border select-none">•</span>
+          <span className="font-semibold text-foreground">
             {catalogueSize} Resources
-          </Badge>
+          </span>
         </div>
 
-        {/* Primary View Navigation Buttons */}
-        <nav className="flex items-center gap-1.5">
-          <Button
-            variant={activeTab === "search" ? "default" : "ghost"}
-            size="sm"
+        {/* Primary View Navigation Tabs */}
+        <nav className="flex items-center p-1 rounded-lg bg-muted/60 border border-border/60">
+          <button
+            type="button"
             onClick={() => setActiveTab("search")}
-            className="gap-1.5"
+            className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-semibold transition-all ${
+              activeTab === "search"
+                ? "bg-primary text-primary-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+            }`}
           >
-            <IconBook className="size-4" />
+            <IconBook className="size-3.5" />
             <span>Discovery</span>
-          </Button>
+          </button>
 
-          <Button
-            variant={activeTab === "evaluation" ? "default" : "ghost"}
-            size="sm"
+          <button
+            type="button"
             onClick={() => setActiveTab("evaluation")}
-            className="gap-1.5"
+            className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-semibold transition-all ${
+              activeTab === "evaluation"
+                ? "bg-primary text-primary-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+            }`}
           >
-            <IconChartBar className="size-4" />
+            <IconChartBar className="size-3.5" />
             <span>IR Evaluation</span>
-          </Button>
+          </button>
 
-          <Button
-            variant={activeTab === "responsible_ai" ? "default" : "ghost"}
-            size="sm"
+          <button
+            type="button"
             onClick={() => setActiveTab("responsible_ai")}
-            className="gap-1.5"
+            className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-semibold transition-all ${
+              activeTab === "responsible_ai"
+                ? "bg-primary text-primary-foreground shadow-xs font-bold"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+            }`}
           >
-            <IconWorld className="size-4" />
-            <span>SDGs & Novelty</span>
-          </Button>
+            <IconWorld className="size-3.5" />
+            <span className="hidden sm:inline">SDGs & Novelty</span>
+            <span className="sm:hidden">SDGs</span>
+          </button>
         </nav>
       </div>
     </header>
