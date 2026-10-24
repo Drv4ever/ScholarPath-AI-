@@ -1,0 +1,74 @@
+[
+  {
+    "id": "BENCH-01",
+    "goal": "Machine learning foundations and intuitive linear algebra for beginner computer science without heavy proofs",
+    "target_level": "Introductory",
+    "subject": "Computer Science",
+    "known_prerequisites": "High school algebra and Python",
+    "ground_truth_relevance": {
+      "RES-CS-001": 3,
+      "RES-CS-002": 3,
+      "RES-MATH-002": 2,
+      "RES-CS-006": 1,
+      "RES-CS-003": 0,
+      "RES-CS-005": 0,
+      "RES-EE-001": 0
+    }
+  },
+  {
+    "id": "BENCH-02",
+    "goal": "Smart grid integration of renewable energy, battery storage systems, and inverter control",
+    "target_level": "Intermediate",
+    "subject": "Electrical Engineering",
+    "known_prerequisites": "Circuit theory and power basics",
+    "ground_truth_relevance": {
+      "RES-EE-001": 3,
+      "RES-EE-002": 3,
+      "RES-EE-003": 2,
+      "RES-EE-004": 1,
+      "RES-CS-001": 0,
+      "RES-SOC-001": 0
+    }
+  },
+  {
+    "id": "BENCH-03",
+    "goal": "Mixed methods research combining qualitative coding and statistical experimental design for human computer interaction",
+    "target_level": "Advanced",
+    "subject": "Social Sciences",
+    "known_prerequisites": "Introductory statistics",
+    "ground_truth_relevance": {
+      "RES-SOC-001": 3,
+      "RES-SOC-002": 3,
+      "RES-SOC-003": 2,
+      "RES-CS-001": 0,
+      "RES-EE-002": 0
+    }
+  },
+  {
+    "id": "BENCH-04",
+    "goal": "Convex optimization theory, duality, and algorithmic convergence",
+    "target_level": "Advanced",
+    "subject": "Mathematics",
+    "known_prerequisites": "Multivariable calculus and linear algebra",
+    "ground_truth_relevance": {
+      "RES-MATH-003": 3,
+      "RES-CS-007": 2,
+      "RES-MATH-001": 2,
+      "RES-CS-003": 1,
+      "RES-EE-001": 0
+    }
+  },
+  {
+    "id": "BENCH-05",
+    "goal": "Bioinformatics sequence alignment algorithms and deep learning applications in drug discovery",
+    "target_level": "Intermediate",
+    "subject": "Data Science",
+    "known_prerequisites": "Basic Python and biochemistry",
+    "ground_truth_relevance": {
+      "RES-BIO-001": 3,
+      "RES-BIO-002": 3,
+      "RES-CS-002": 1,
+      "RES-SOC-001": 0
+    }
+  }
+]

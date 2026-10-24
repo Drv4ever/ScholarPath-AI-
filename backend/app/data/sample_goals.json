@@ -1,0 +1,32 @@
+[
+  {
+    "id": "GOAL-01",
+    "title": "Machine Learning & Linear Algebra Foundations",
+    "description": "First-year student building foundations in Machine Learning and intuitive Linear Algebra without getting overwhelmed by theoretical proofs.",
+    "query": "Machine learning foundations and intuitive linear algebra for beginner computer science without heavy proofs",
+    "target_level": "Introductory",
+    "subject_filter": "Computer Science",
+    "known_prerequisites": "High school algebra and basic Python programming",
+    "rationale": "Evaluates cold-start handling for introductory students needing accessible explanations and intuitive mathematical framing."
+  },
+  {
+    "id": "GOAL-02",
+    "title": "Renewable Energy Grid Integration & Storage",
+    "description": "Engineering student researching smart grid modernization, battery energy storage systems, and frequency stability.",
+    "query": "Smart grid integration of renewable energy, battery storage systems, and inverter control",
+    "target_level": "Intermediate",
+    "subject_filter": "Electrical Engineering",
+    "known_prerequisites": "Basic circuit theory and linear control systems",
+    "rationale": "Tests multi-topic technical retrieval across power engineering, battery chemistry, and control dynamics."
+  },
+  {
+    "id": "GOAL-03",
+    "title": "Mixed-Method Empirical HCI Research",
+    "description": "Graduate researcher designing mixed qualitative and quantitative user research frameworks for interactive systems.",
+    "query": "Mixed methods research combining qualitative coding and statistical experimental design for human computer interaction",
+    "target_level": "Advanced",
+    "subject_filter": "Social Sciences",
+    "known_prerequisites": "Introductory statistics, user testing basics, and qualitative interviewing",
+    "rationale": "Validates advanced academic research discovery, cross-disciplinary methodology matching, and prerequisite alignment."
+  }
+]
