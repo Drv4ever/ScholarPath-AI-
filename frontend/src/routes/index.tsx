@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import React, { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/Header"
 import { SampleGoalsPicker } from "@/components/SampleGoalsPicker"
 import { SearchGoalForm } from "@/components/SearchGoalForm"

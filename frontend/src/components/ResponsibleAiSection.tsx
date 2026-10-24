@@ -6,7 +6,6 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
   IconWorld,
   IconShield,
@@ -134,6 +133,44 @@ export const ResponsibleAiSection: React.FC = () => {
               Incorporates Open-Access digital textbooks alongside library shelf resources to ensure zero-cost accessibility
               for economically constrained learners.
             </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Implemented Safeguards vs Future University Integrations */}
+      <Card className="border-border shadow-xs">
+        <CardHeader className="p-4 border-b border-border">
+          <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
+            Current Prototype Safeguards vs. Campus Production Roadmap
+          </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Transparent boundary between validated hackathon capabilities and institutional deployment prerequisites.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3.5 space-y-1.5">
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 block uppercase tracking-wider text-[10px]">
+              Validated & Implemented in Prototype
+            </span>
+            <ul className="space-y-1 text-muted-foreground text-[11px] list-disc list-inside">
+              <li>Stateless cold-start retrieval requiring zero student borrowing records</li>
+              <li>Asymmetric cognitive distance penalty protecting beginners from overload</li>
+              <li>Intent vs. prerequisite separation isolating goals from current knowledge</li>
+              <li>Session-scoped Rocchio vector steering with immediate reset</li>
+              <li>White-box contrastive explainability derived directly from ranking scores</li>
+            </ul>
+          </div>
+
+          <div className="rounded-lg border border-primary/20 bg-primary/5 p-3.5 space-y-1.5">
+            <span className="font-bold text-primary block uppercase tracking-wider text-[10px]">
+              Campus Enterprise Integration Roadmap
+            </span>
+            <ul className="space-y-1 text-muted-foreground text-[11px] list-disc list-inside">
+              <li>SAML 2.0 / Shibboleth SSO integration with granular student privacy consent</li>
+              <li>ILS / Alma / Koha SIP2/NCIP connector for real-time physical stack availability</li>
+              <li>LMS (Canvas/Blackboard) syllabus ingestion for automated course reserves</li>
+              <li>Institutional bias audits across under-represented interdisciplinary collections</li>
+            </ul>
           </div>
         </CardContent>
       </Card>

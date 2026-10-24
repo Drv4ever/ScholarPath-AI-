@@ -38,3 +38,20 @@ def test_average_metrics():
     assert avg.precision_at_3 == 0.5
     assert avg.precision_at_5 == 0.5
     assert avg.mrr == 0.6
+
+def test_compute_metrics_zero_relevant_ground_truth():
+    ranked_ids = ["RES-01", "RES-02"]
+    ground_truth = {"RES-01": 0, "RES-02": 0}
+    metrics = compute_metrics(ranked_ids, ground_truth)
+    assert metrics.precision_at_5 == 0.0
+    assert metrics.recall_at_5 == 0.0
+    assert metrics.ndcg_at_5 == 0.0
+    assert metrics.mrr == 0.0
+
+def test_compute_metrics_empty_ranking():
+    ground_truth = {"RES-01": 3}
+    metrics = compute_metrics([], ground_truth)
+    assert metrics.precision_at_5 == 0.0
+    assert metrics.recall_at_5 == 0.0
+    assert metrics.ndcg_at_5 == 0.0
+    assert metrics.mrr == 0.0

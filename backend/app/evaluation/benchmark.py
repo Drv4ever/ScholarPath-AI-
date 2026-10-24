@@ -154,10 +154,22 @@ class BenchmarkEvaluator:
         baseline_agg = average_metrics(baseline_metrics_list)
         no_penalty_agg = average_metrics(no_penalty_metrics)
 
-        # Calculate percentage improvements
-        p5_imp = ((hybrid_agg.precision_at_5 - baseline_agg.precision_at_5) / max(baseline_agg.precision_at_5, 1e-4)) * 100
-        ndcg_imp = ((hybrid_agg.ndcg_at_5 - baseline_agg.ndcg_at_5) / max(baseline_agg.ndcg_at_5, 1e-4)) * 100
-        mrr_imp = ((hybrid_agg.mrr - baseline_agg.mrr) / max(baseline_agg.mrr, 1e-4)) * 100
+        # Calculate relative percentage improvements and absolute percentage-point deltas
+        p5_base = max(baseline_agg.precision_at_5, 1e-4)
+        p5_imp = ((hybrid_agg.precision_at_5 - baseline_agg.precision_at_5) / p5_base) * 100.0
+        p5_pts = (hybrid_agg.precision_at_5 - baseline_agg.precision_at_5) * 100.0
+
+        ndcg_base = max(baseline_agg.ndcg_at_5, 1e-4)
+        ndcg_imp = ((hybrid_agg.ndcg_at_5 - baseline_agg.ndcg_at_5) / ndcg_base) * 100.0
+        ndcg_pts = hybrid_agg.ndcg_at_5 - baseline_agg.ndcg_at_5
+
+        recall_base = max(baseline_agg.recall_at_5, 1e-4)
+        recall_imp = ((hybrid_agg.recall_at_5 - baseline_agg.recall_at_5) / recall_base) * 100.0
+        recall_pts = (hybrid_agg.recall_at_5 - baseline_agg.recall_at_5) * 100.0
+
+        mrr_base = max(baseline_agg.mrr, 1e-4)
+        mrr_imp = ((hybrid_agg.mrr - baseline_agg.mrr) / mrr_base) * 100.0
+        mrr_pts = hybrid_agg.mrr - baseline_agg.mrr
 
         ablation_study = {
             "ScholarPath Proposed (Hybrid + Penalty + Separation)": hybrid_agg,
@@ -171,8 +183,13 @@ class BenchmarkEvaluator:
             baseline_aggregate=baseline_agg,
             improvement_percentages={
                 "precision_at_5_delta_pct": round(p5_imp, 1),
+                "precision_at_5_delta_pts": round(p5_pts, 1),
                 "ndcg_at_5_delta_pct": round(ndcg_imp, 1),
-                "mrr_delta_pct": round(mrr_imp, 1)
+                "ndcg_at_5_delta_pts": round(ndcg_pts, 4),
+                "recall_at_5_delta_pct": round(recall_imp, 1),
+                "recall_at_5_delta_pts": round(recall_pts, 1),
+                "mrr_delta_pct": round(mrr_imp, 1),
+                "mrr_delta_pts": round(mrr_pts, 4)
             },
             query_results=query_results,
             ablation_study=ablation_study,

@@ -3,7 +3,8 @@ from backend.app.models.resource import DifficultyLevel
 from backend.app.ranking.penalties import (
     calculate_asymmetric_difficulty_penalty,
     calculate_discovery_bonus,
-    evaluate_prerequisite_fit
+    evaluate_prerequisite_fit,
+    calculate_topic_diversity_penalty
 )
 
 def test_exact_level_match():
@@ -59,3 +60,18 @@ def test_discovery_bonus():
     # Heavily borrowed
     bonus_heavy, _ = calculate_discovery_bonus(borrow_count=200, quality_rating=4.9, max_catalogue_borrows=200)
     assert bonus_heavy == 0.0
+
+def test_topic_diversity_penalty():
+    # First appearance: zero penalty
+    pen0, expl0 = calculate_topic_diversity_penalty("Deep Learning", ["Linear Algebra", "Calculus"])
+    assert pen0 == 0.0
+    assert "Diverse topic coverage" in expl0
+
+    # Duplicate appearance: penalization
+    pen1, expl1 = calculate_topic_diversity_penalty("Deep Learning", ["Deep Learning", "Calculus"])
+    assert pen1 > 0.0
+    assert "Topic redundancy adjustment" in expl1
+
+    # Multiple duplicates: scaled penalization
+    pen2, _ = calculate_topic_diversity_penalty("Deep Learning", ["Deep Learning", "Deep Learning", "Calculus"])
+    assert pen2 > pen1

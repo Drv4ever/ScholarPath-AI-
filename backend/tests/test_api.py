@@ -92,3 +92,29 @@ def test_frontend_static_serving(client):
     assert response.status_code == 200
     assert "ScholarPath AI" in response.text
 
+def test_all_three_presets_end_to_end(client):
+    goals_resp = client.get("/api/sample-goals")
+    assert goals_resp.status_code == 200
+    goals = goals_resp.json()
+    assert len(goals) == 3
+
+    for g in goals:
+        rec_payload = {
+            "query": g["query"],
+            "target_level": g["target_level"],
+            "subject_filter": g["subject_filter"],
+            "known_prerequisites": g["known_prerequisites"],
+            "top_k": 5
+        }
+        res = client.post("/api/recommend", json=rec_payload)
+        assert res.status_code == 200, f"Preset {g['id']} failed: {res.text}"
+        data = res.json()
+        assert len(data["results"]) >= 3, f"Preset {g['id']} returned fewer than 3 results"
+        
+        # Verify result attributes
+        for item in data["results"]:
+            assert item["resource"]["id"]
+            assert item["resource"]["title"]
+            assert item["explanation"]["summary_sentence"]
+            assert item["explanation"]["level_fit_score"] >= 0.0
+

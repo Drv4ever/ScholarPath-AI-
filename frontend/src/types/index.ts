@@ -112,8 +112,14 @@ export interface EvaluationSummary {
   baseline_aggregate: IRMetrics;
   improvement_percentages: {
     precision_at_5_delta_pct: number;
+    precision_at_5_delta_pts?: number;
     ndcg_at_5_delta_pct: number;
+    ndcg_at_5_delta_pts?: number;
+    recall_at_5_delta_pct?: number;
+    recall_at_5_delta_pts?: number;
     mrr_delta_pct: number;
+    mrr_delta_pts?: number;
+    [key: string]: number | undefined;
   };
   query_results: BenchmarkEvaluationResult[];
   ablation_study: Record<string, IRMetrics>;

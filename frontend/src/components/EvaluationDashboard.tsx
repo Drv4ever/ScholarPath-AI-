@@ -21,10 +21,89 @@ import { Button } from "@/components/ui/button"
 import {
   IconChartBar,
   IconTrendingUp,
+  IconTrendingDown,
+  IconMinus,
   IconRotateClockwise,
   IconAlertTriangle,
   IconAdjustments,
 } from "@tabler/icons-react"
+
+// Helper to render mathematically rigorous delta badges distinguishing relative % from percentage-points (pp)
+function renderDeltaBadge(
+  deltaPct: number = 0,
+  deltaPts?: number,
+  isPercentageMetric: boolean = true
+) {
+  if (Math.abs(deltaPct) < 0.05) {
+    return (
+      <Badge variant="outline" className="text-muted-foreground border-border bg-muted/30 font-medium text-[11px] gap-0.5">
+        <IconMinus className="size-3" />
+        <span>Tie (0.0%)</span>
+      </Badge>
+    )
+  }
+
+  if (deltaPct > 0) {
+    return (
+      <Badge variant="outline" className="text-emerald-600 border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 font-bold text-[11px] gap-0.5">
+        <IconTrendingUp className="size-3" />
+        <span>+{deltaPct.toFixed(1)}%</span>
+        {deltaPts !== undefined && (
+          <span className="text-[10px] font-normal opacity-85">
+            ({deltaPts > 0 ? "+" : ""}{deltaPts.toFixed(1)}{isPercentageMetric ? " pp" : ""})
+          </span>
+        )}
+      </Badge>
+    )
+  }
+
+  return (
+    <Badge variant="outline" className="text-rose-600 border-rose-300 bg-rose-50/50 dark:bg-rose-950/20 font-bold text-[11px] gap-0.5">
+      <IconTrendingDown className="size-3" />
+      <span>{deltaPct.toFixed(1)}%</span>
+      {deltaPts !== undefined && (
+        <span className="text-[10px] font-normal opacity-85">
+          ({deltaPts.toFixed(1)}{isPercentageMetric ? " pp" : ""})
+        </span>
+      )}
+    </Badge>
+  )
+}
+
+function renderTableCellGain(
+  proposed: number,
+  baseline: number,
+  isPercentageMetric: boolean = true
+) {
+  const diff = proposed - baseline
+  const diffPts = isPercentageMetric ? diff * 100 : diff
+  const denom = Math.max(baseline, 0.0001)
+  const relGainPct = (diff / denom) * 100
+
+  if (Math.abs(relGainPct) < 0.05) {
+    return <span className="text-xs font-semibold text-muted-foreground">Tie (0.0%)</span>
+  }
+
+  if (relGainPct > 0) {
+    return (
+      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+        +{relGainPct.toFixed(1)}%
+        <span className="text-[10px] font-normal text-muted-foreground ml-1">
+          (+{diffPts.toFixed(1)}{isPercentageMetric ? " pp" : ""})
+        </span>
+      </span>
+    )
+  }
+
+  return (
+    <span className="text-xs font-bold text-rose-600 dark:text-rose-400">
+      {relGainPct.toFixed(1)}%
+      <span className="text-[10px] font-normal text-muted-foreground ml-1">
+        ({diffPts.toFixed(1)}{isPercentageMetric ? " pp" : ""})
+      </span>
+    </span>
+  )
+}
 
 export const EvaluationDashboard: React.FC = () => {
   const [summary, setSummary] = useState<EvaluationSummary | null>(null)
@@ -110,14 +189,15 @@ export const EvaluationDashboard: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                   Precision@5 (Top-5 Accuracy)
                 </span>
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-black text-foreground">
                     {(summary.hybrid_aggregate.precision_at_5 * 100).toFixed(1)}%
                   </span>
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-300 font-bold gap-0.5">
-                    <IconTrendingUp className="size-3" />
-                    +{summary.improvement_percentages.precision_at_5_delta_pct}%
-                  </Badge>
+                  {renderDeltaBadge(
+                    summary.improvement_percentages.precision_at_5_delta_pct,
+                    summary.improvement_percentages.precision_at_5_delta_pts,
+                    true
+                  )}
                 </div>
                 <span className="text-[10px] text-muted-foreground block">
                   BM25: {(summary.baseline_aggregate.precision_at_5 * 100).toFixed(1)}%
@@ -130,14 +210,15 @@ export const EvaluationDashboard: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                   NDCG@5 (Ranking Quality)
                 </span>
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-black text-foreground">
                     {summary.hybrid_aggregate.ndcg_at_5.toFixed(3)}
                   </span>
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-300 font-bold gap-0.5">
-                    <IconTrendingUp className="size-3" />
-                    +{summary.improvement_percentages.ndcg_at_5_delta_pct}%
-                  </Badge>
+                  {renderDeltaBadge(
+                    summary.improvement_percentages.ndcg_at_5_delta_pct,
+                    summary.improvement_percentages.ndcg_at_5_delta_pts,
+                    false
+                  )}
                 </div>
                 <span className="text-[10px] text-muted-foreground block">
                   BM25: {summary.baseline_aggregate.ndcg_at_5.toFixed(3)}
@@ -150,13 +231,21 @@ export const EvaluationDashboard: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                   Mean Reciprocal Rank (MRR)
                 </span>
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-black text-foreground">
                     {summary.hybrid_aggregate.mrr.toFixed(3)}
                   </span>
-                  <Badge variant="secondary" className="font-bold">
-                    Rank #1
-                  </Badge>
+                  {summary.hybrid_aggregate.mrr >= 0.999 ? (
+                    <Badge variant="secondary" className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 text-[11px]">
+                      Optimal Rank #1
+                    </Badge>
+                  ) : (
+                    renderDeltaBadge(
+                      summary.improvement_percentages.mrr_delta_pct,
+                      summary.improvement_percentages.mrr_delta_pts,
+                      false
+                    )
+                  )}
                 </div>
                 <span className="text-[10px] text-muted-foreground block">
                   First relevant book at top rank
@@ -169,16 +258,18 @@ export const EvaluationDashboard: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                   Recall@5 (Coverage)
                 </span>
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-black text-foreground">
                     {(summary.hybrid_aggregate.recall_at_5 * 100).toFixed(1)}%
                   </span>
-                  <Badge variant="outline" className="text-[10px]">
-                    {summary.total_test_queries} Test Queries
-                  </Badge>
+                  {renderDeltaBadge(
+                    summary.improvement_percentages.recall_at_5_delta_pct ?? 0,
+                    summary.improvement_percentages.recall_at_5_delta_pts,
+                    true
+                  )}
                 </div>
                 <span className="text-[10px] text-muted-foreground block">
-                  BM25: {(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}%
+                  BM25: {(summary.baseline_aggregate.recall_at_5 * 100).toFixed(1)}% ({summary.total_test_queries} Queries)
                 </span>
               </CardContent>
             </Card>
@@ -197,7 +288,7 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableHead className="text-xs font-bold">Evaluation Metric</TableHead>
                   <TableHead className="text-xs font-bold">Lexical Baseline (BM25)</TableHead>
                   <TableHead className="text-xs font-bold text-primary">ScholarPath AI (Proposed)</TableHead>
-                  <TableHead className="text-xs font-bold">Relative Gain</TableHead>
+                  <TableHead className="text-xs font-bold">Statistical Delta</TableHead>
                   <TableHead className="text-xs font-bold">IR Significance</TableHead>
                 </TableRow>
               </TableHeader>
@@ -208,8 +299,8 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableCell className="font-mono text-xs font-bold text-primary">
                     {(summary.hybrid_aggregate.precision_at_3 * 100).toFixed(1)}%
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-emerald-600">
-                    +{(((summary.hybrid_aggregate.precision_at_3 - summary.baseline_aggregate.precision_at_3) / Math.max(summary.baseline_aggregate.precision_at_3, 0.001)) * 100).toFixed(1)}%
+                  <TableCell>
+                    {renderTableCellGain(summary.hybrid_aggregate.precision_at_3, summary.baseline_aggregate.precision_at_3, true)}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">Proportion of top 3 suggestions directly relevant.</TableCell>
                 </TableRow>
@@ -220,8 +311,8 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableCell className="font-mono text-xs font-bold text-primary">
                     {(summary.hybrid_aggregate.precision_at_5 * 100).toFixed(1)}%
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-emerald-600">
-                    +{summary.improvement_percentages.precision_at_5_delta_pct}%
+                  <TableCell>
+                    {renderTableCellGain(summary.hybrid_aggregate.precision_at_5, summary.baseline_aggregate.precision_at_5, true)}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">Quality of immediate student recommendations.</TableCell>
                 </TableRow>
@@ -232,8 +323,8 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableCell className="font-mono text-xs font-bold text-primary">
                     {summary.hybrid_aggregate.ndcg_at_5.toFixed(4)}
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-emerald-600">
-                    +{summary.improvement_percentages.ndcg_at_5_delta_pct}%
+                  <TableCell>
+                    {renderTableCellGain(summary.hybrid_aggregate.ndcg_at_5, summary.baseline_aggregate.ndcg_at_5, false)}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">Graded ranking quality under discounted gain.</TableCell>
                 </TableRow>
@@ -244,8 +335,14 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableCell className="font-mono text-xs font-bold text-primary">
                     {summary.hybrid_aggregate.mrr.toFixed(4)}
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-muted-foreground">
-                    Optimal (1.0)
+                  <TableCell>
+                    {summary.hybrid_aggregate.mrr >= 0.999 && summary.baseline_aggregate.mrr >= 0.999 ? (
+                      <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                        Optimal (1.0000)
+                      </span>
+                    ) : (
+                      renderTableCellGain(summary.hybrid_aggregate.mrr, summary.baseline_aggregate.mrr, false)
+                    )}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">First highly relevant item retrieved at rank 1.</TableCell>
                 </TableRow>
@@ -256,8 +353,8 @@ export const EvaluationDashboard: React.FC = () => {
                   <TableCell className="font-mono text-xs font-bold text-primary">
                     {(summary.hybrid_aggregate.recall_at_5 * 100).toFixed(1)}%
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-emerald-600">
-                    +{(((summary.hybrid_aggregate.recall_at_5 - summary.baseline_aggregate.recall_at_5) / Math.max(summary.baseline_aggregate.recall_at_5, 0.001)) * 100).toFixed(1)}%
+                  <TableCell>
+                    {renderTableCellGain(summary.hybrid_aggregate.recall_at_5, summary.baseline_aggregate.recall_at_5, true)}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">Coverage of gold-standard references captured.</TableCell>
                 </TableRow>

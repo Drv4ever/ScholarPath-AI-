@@ -108,3 +108,29 @@ def evaluate_prerequisite_fit(
         return 0.85, f"Partial prerequisite match: Covers {', '.join(matched)}; may need review of {', '.join(unmatched)}."
     else:
         return 0.65, f"Prerequisite gap: Resource assumes familiarity with {', '.join(unmatched)}."
+
+def calculate_topic_diversity_penalty(
+    candidate_subtopic: Optional[str],
+    selected_subtopics: List[str],
+    penalty_per_duplicate: float = 0.04
+) -> Tuple[float, str]:
+    """
+    Topic & Syllabus Coverage Diversity Adjustment:
+    Penalizes redundant clustering of identical subtopics within top-k recommendations,
+    encouraging varied curricular perspectives while maintaining high topical relevance.
+    """
+    if not candidate_subtopic or not candidate_subtopic.strip():
+        return 0.0, "Diverse syllabus entry: no subtopic overlap detected."
+
+    norm_subtopic = candidate_subtopic.strip().lower()
+    norm_selected = [s.strip().lower() for s in selected_subtopics if s]
+    dup_count = norm_selected.count(norm_subtopic)
+
+    if dup_count == 0:
+        return 0.0, f"Diverse topic coverage: first recommendation for '{candidate_subtopic}'."
+
+    penalty = min(0.25, dup_count * penalty_per_duplicate)
+    return round(penalty, 3), (
+        f"Topic redundancy adjustment: '{candidate_subtopic}' already appears {dup_count} time(s) "
+        f"in higher-ranked results (-{penalty:.2f} diversity adjustment)."
+    )

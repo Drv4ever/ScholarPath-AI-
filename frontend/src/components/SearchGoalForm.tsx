@@ -9,7 +9,6 @@ import {
   IconAdjustmentsHorizontal,
   IconGitFork,
   IconLayersLinked,
-  IconSparkles,
 } from "@tabler/icons-react"
 
 interface SearchGoalFormProps {

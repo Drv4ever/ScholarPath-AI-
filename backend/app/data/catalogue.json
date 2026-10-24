@@ -566,10 +566,12 @@
       "Paul Cairns",
       "Anna L. Cox"
     ],
-    "subject": "Humanities",
+    "subject": "Social Sciences",
     "subfields": [
+      "Human-Computer Interaction",
       "HCI",
-      "Cognitive Science"
+      "Cognitive Science",
+      "Social Sciences"
     ],
     "subtopic": "Empirical User Studies in HCI",
     "keywords": [
@@ -654,7 +656,9 @@
     ],
     "subject": "Mathematics",
     "subfields": [
-      "Applied Mathematics"
+      "Applied Mathematics",
+      "Computer Science",
+      "Linear Algebra for ML"
     ],
     "subtopic": "Foundational Computational Linear Algebra",
     "keywords": [
@@ -1987,7 +1991,8 @@
     "subject": "Data Science",
     "subfields": [
       "Statistical Learning",
-      "Machine Learning"
+      "Machine Learning",
+      "Computer Science"
     ],
     "subtopic": "Supervised and Unsupervised Statistical Learning",
     "keywords": [

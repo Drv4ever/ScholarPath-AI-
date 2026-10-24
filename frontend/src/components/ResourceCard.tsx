@@ -202,17 +202,15 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           </Button>
 
           {resource.url && (
-            <Button
-              variant="outline"
-              size="xs"
-              asChild
-              className="gap-1"
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1 h-6 rounded-[min(var(--radius-md),10px)] px-2 text-xs border border-border bg-background hover:bg-muted hover:text-foreground font-medium transition-colors"
             >
-              <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                <span>Catalogue DOI</span>
-                <IconExternalLink className="size-3" />
-              </a>
-            </Button>
+              <span>Catalogue DOI</span>
+              <IconExternalLink className="size-3" />
+            </a>
           )}
         </div>
       </CardFooter>
