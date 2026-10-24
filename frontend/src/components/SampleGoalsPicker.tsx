@@ -1,67 +1,74 @@
-import React from 'react';
-import { SampleGoal } from '../types';
-import { Compass, Sparkles, ArrowRight } from 'lucide-react';
+import React from "react"
+import type { SampleGoal } from "@/types"
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { IconCompass, IconSparkles, IconArrowRight } from "@tabler/icons-react"
 
 interface SampleGoalsPickerProps {
-  goals: SampleGoal[];
-  onSelectGoal: (goal: SampleGoal) => void;
-  selectedGoalId?: string;
+  goals: SampleGoal[]
+  onSelectGoal: (goal: SampleGoal) => void
+  selectedGoalId?: string
 }
 
 export const SampleGoalsPicker: React.FC<SampleGoalsPickerProps> = ({
   goals,
   onSelectGoal,
-  selectedGoalId
+  selectedGoalId,
 }) => {
-  if (!goals || goals.length === 0) return null;
+  if (!goals || goals.length === 0) return null
 
   return (
-    <div className="bg-gradient-to-r from-sky-50 via-indigo-50 to-brand-50 p-4 sm:p-5 rounded-2xl border border-sky-100 mb-6 shadow-sm">
-      <div className="flex items-center justify-between mb-3">
+    <div className="mb-6 rounded-xl border border-border bg-card p-4 shadow-xs">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Compass className="w-5 h-5 text-brand-600" />
-          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
-            Required Benchmark Learner Goals (Cold-Start Presets)
+          <IconCompass className="size-4 text-primary" />
+          <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
+            Prepared Learner Goals (Cold-Start Benchmark Presets)
           </h3>
         </div>
-        <span className="text-xs text-brand-700 bg-white/80 px-2.5 py-1 rounded-full font-medium border border-sky-200 flex items-center gap-1">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" /> 1-Click Load
-        </span>
+        <Badge variant="outline" className="gap-1 text-[11px] font-semibold text-primary">
+          <IconSparkles className="size-3 text-amber-500" />
+          1-Click Preset
+        </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {goals.map((goal, idx) => {
-          const isSelected = selectedGoalId === goal.id;
+          const isSelected = selectedGoalId === goal.id
           return (
-            <button
+            <Card
               key={goal.id}
               onClick={() => onSelectGoal(goal)}
-              className={`text-left p-3.5 rounded-xl transition-all border ${
+              className={`cursor-pointer transition-all hover:border-primary/50 hover:shadow-sm ${
                 isSelected
-                  ? 'bg-white border-brand-500 shadow-md ring-2 ring-brand-500/20'
-                  : 'bg-white/80 hover:bg-white border-slate-200/80 hover:border-brand-300 hover:shadow-sm'
+                  ? "border-primary ring-2 ring-primary/20 shadow-xs"
+                  : "border-border/80"
               }`}
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-brand-700 uppercase tracking-wide">
-                  Goal {idx + 1}: {goal.subject_filter}
-                </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                  {goal.target_level}
-                </span>
-              </div>
-              <p className="text-xs font-semibold text-slate-900 mb-1 line-clamp-1">{goal.title}</p>
-              <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed mb-2">
-                {goal.description}
-              </p>
-              <div className="flex items-center justify-between text-[11px] text-brand-600 font-semibold pt-1 border-t border-slate-100">
-                <span>Load Goal & Parameters</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </div>
-            </button>
-          );
+              <CardHeader className="p-3.5 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                    Goal {idx + 1}: {goal.subject_filter}
+                  </span>
+                  <Badge variant="secondary" className="text-[10px] font-bold">
+                    {goal.target_level}
+                  </Badge>
+                </div>
+                <CardTitle className="text-xs font-bold text-foreground line-clamp-1">
+                  {goal.title}
+                </CardTitle>
+                <CardDescription className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                  {goal.description}
+                </CardDescription>
+                <div className="flex items-center justify-between pt-1 text-[11px] font-semibold text-primary">
+                  <span>Load Preset</span>
+                  <IconArrowRight className="size-3.5" />
+                </div>
+              </CardHeader>
+            </Card>
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}

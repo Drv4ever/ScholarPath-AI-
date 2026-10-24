@@ -89,7 +89,18 @@ flowchart TD
 
 ### Prerequisites
 - **Python**: 3.10+ (tested on Python 3.12.4)
-- **Node.js**: v18+ (tested on v22.16.0)
+- **Bun**: v1.1+ (installed at `C:\Users\Dhruv Jain\.bun\bin`) / Node.js: v18+
+
+---
+
+### Mandatory Frontend Initialization
+The frontend is initialized using the exact mandatory command:
+```bash
+bunx --bun shadcn@latest init --preset b3PkSQ --template start
+```
+- **Framework**: TanStack Start (file-based routing under `src/routes`)
+- **UI Components**: Native shadcn primitives under `src/components/ui/` (`button`, `card`, `input`, `badge`, `table`, `dialog`, `select`, `checkbox`, `switch`, `tabs`)
+- **Theme & Styling**: Preserved default shadcn base-nova styling, OKLCH CSS variables, and Tabler icons (`@tabler/icons-react`).
 
 ---
 
@@ -109,35 +120,31 @@ python3 demo_verification.py
 
 ---
 
-### Method B: Unified Full-Stack Application (Backend + Built Frontend)
+### Method B: Running the Full-Stack Application
 
-The production build of the frontend is bundled directly with FastAPI. You can run the entire system on a single port:
-
-#### Windows PowerShell:
+#### Step 1: Start Backend API (FastAPI)
 ```powershell
-# 1. Install Python dependencies (if not already installed)
-python -m pip install fastapi uvicorn pydantic pydantic-settings scikit-learn numpy scipy pytest httpx
-
-# 2. Start the unified server
 python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+- **API Swagger Documentation**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **API Health Check**: [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health)
 
-#### macOS / Linux:
-```bash
-# 1. Install Python dependencies
-python3 -m pip install fastapi uvicorn pydantic pydantic-settings scikit-learn numpy scipy pytest httpx
-
-# 2. Start the unified server
-python3 -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+#### Step 2: Start Frontend (TanStack Start + shadcn UI)
+```powershell
+cd frontend
+bun run dev
 ```
-
-- **Interactive Discovery UI**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-- **FastAPI Interactive Swagger Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **ReDoc API Documentation**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+Open **[http://localhost:3000/](http://localhost:3000/)** in your browser.
+*(The frontend automatically proxies `/api/*` requests directly to `http://127.0.0.1:8000` via Vite).*
 
 ---
 
-### Method C: Frontend Hot-Reload Development (Vite Dev Server)
+### Method C: Production Build
+```powershell
+cd frontend
+bun run build
+bun run preview
+```
 
 If you wish to modify the frontend UI with instant hot module replacement:
 

@@ -6,6 +6,7 @@ from typing import List, Dict, Any, Optional
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Query, status
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.config import settings
@@ -240,9 +241,36 @@ async def get_failures():
     """Retrieve structured failure case analyses and documented limitations."""
     return get_failure_case_analyses()
 
-# Mount frontend production build if available (enables unified single-port local demo)
-frontend_dist = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
-if frontend_dist.exists():
-    from fastapi.staticfiles import StaticFiles
-    app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="frontend")
+@app.get("/", response_class=HTMLResponse, tags=["System"])
+async def root_index():
+    """Root landing endpoint for ScholarPath AI backend & frontend bridge."""
+    return """<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ScholarPath AI - Explainable Academic Resource Recommendation System</title>
+    <style>
+      body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: 0 auto; }
+      h1 { color: #38bdf8; }
+      a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+      a:hover { text-decoration: underline; }
+      .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+      .badge { background: #0284c7; color: white; padding: 3px 8px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <h1>ScholarPath AI <span class="badge">VIT Innovate-A-Thon</span></h1>
+    <p>Explainable, cold-start academic resource discovery system.</p>
+    <div class="card">
+      <h3>Active Services:</h3>
+      <ul>
+        <li><strong>Interactive Frontend (TanStack Start + shadcn/ui):</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> (Run <code>bun run dev</code> in <code>frontend/</code>)</li>
+        <li><strong>FastAPI Swagger Documentation:</strong> <a href="/docs">/docs</a></li>
+        <li><strong>OpenAPI Specification:</strong> <a href="/openapi.json">/openapi.json</a></li>
+        <li><strong>Live IR Evaluation Endpoint:</strong> <a href="/api/evaluate">/api/evaluate</a></li>
+      </ul>
+    </div>
+  </body>
+</html>"""
+
 
