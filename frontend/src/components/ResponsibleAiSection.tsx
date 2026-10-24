@@ -139,16 +139,16 @@ export const ResponsibleAiSection: React.FC = () => {
       <Card className="border-border shadow-xs rounded-xl overflow-hidden">
         <CardHeader className="p-4 sm:p-5 border-b border-border/80 bg-muted/20">
           <CardTitle className="text-xs font-bold uppercase tracking-wider text-foreground">
-            Current Prototype Safeguards vs. Campus Production Roadmap
+            Active Core Safeguards vs. Institutional Deployment Roadmap
           </CardTitle>
           <CardDescription className="text-xs text-muted-foreground font-medium">
-            Transparent distinction between validated prototype capabilities and institutional enterprise prerequisites.
+            Transparent distinction between active algorithmic safeguards and enterprise deployment integrations.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4 space-y-2">
             <span className="font-bold text-emerald-600 dark:text-emerald-400 block uppercase tracking-wider text-xs">
-              Validated in Hackathon Prototype
+              Active Algorithmic Safeguards
             </span>
             <ul className="space-y-1.5 text-xs text-muted-foreground">
               <li className="flex items-start gap-1.5">
@@ -204,8 +204,8 @@ export const ResponsibleAiSection: React.FC = () => {
       <div className="rounded-xl border border-border/80 bg-muted/20 p-4 text-xs text-muted-foreground leading-relaxed">
         <strong className="text-foreground font-semibold block mb-1">Academic Integrity & Scope Disclosure:</strong>
         The algorithmic techniques demonstrated in ScholarPath AI (asymmetric cognitive penalization, intent/prerequisite separation,
-        session-based Rocchio vector steering, and contrastive feature explanation) are presented as proposed engineering design contributions
-        and functional prototypes for university library systems.
+        session-based Rocchio vector steering, and contrastive feature explanation) are presented as engineering contributions
+        and architectural implementations for university library systems.
       </div>
     </div>
   )

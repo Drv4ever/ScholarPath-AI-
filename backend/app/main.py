@@ -259,7 +259,7 @@ async def root_index():
     </style>
   </head>
   <body>
-    <h1>ScholarPath AI <span class="badge">VIT Innovate-A-Thon</span></h1>
+    <h1>ScholarPath AI <span class="badge">Academic Discovery</span></h1>
     <p>Explainable, cold-start academic resource discovery system.</p>
     <div class="card">
       <h3>Active Services:</h3>

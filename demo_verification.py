@@ -28,7 +28,7 @@ from backend.app.explanation.explainer import ExplanationEngine
 def run_demo():
     print("=" * 80)
     print("  SCHOLARPATH AI: COLD-START ACADEMIC RESOURCE DISCOVERY & RECOMMENDATION")
-    print("  VIT AI Innovate-A-Thon Prototype Demonstration")
+    print("  University Academic Discovery System Verification")
     print("=" * 80)
 
     # 1. Load Data

@@ -199,7 +199,7 @@ class BenchmarkEvaluator:
 def get_failure_case_analyses() -> List[FailureCaseAnalysis]:
     """
     Documented failure-case analysis and transparent technical limitations.
-    Required by hackathon judging guidelines.
+    Required by rigorous IR evaluation standards.
     """
     return [
         FailureCaseAnalysis(

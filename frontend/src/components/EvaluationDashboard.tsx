@@ -430,7 +430,7 @@ export const EvaluationDashboard: React.FC = () => {
               </h3>
             </div>
             <p className="text-xs text-muted-foreground px-1 -mt-1">
-              Transparent IR failure mode analysis required by university hackathon evaluation standards.
+              Transparent IR failure mode analysis and boundary diagnostic logging under cold-start conditions.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

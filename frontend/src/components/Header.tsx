@@ -1,5 +1,4 @@
 import React from "react"
-import { Badge } from "@/components/ui/badge"
 import {
   IconBook,
   IconChartBar,
@@ -34,9 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-foreground">
                 ScholarPath AI
               </span>
-              <Badge variant="secondary" className="text-[11px] font-semibold text-muted-foreground px-2 py-0.5">
-                VIT Hackathon
-              </Badge>
             </div>
             <p className="text-xs text-muted-foreground font-medium">
               Explainable Cold-Start Library Recommender
